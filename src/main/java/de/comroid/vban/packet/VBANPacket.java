@@ -56,6 +56,15 @@ public class VBANPacket<T> implements ByteArray {
     public byte[] getBytes() {
         return unfinishedByteArray.getBytes();
     }
+    
+    public byte[] getData() {
+    	byte[] res = new byte[unfinishedByteArray.length()-VBANPacketHead.SIZE];
+    	byte[] buffer = unfinishedByteArray.getBytes();
+    	for (int i = VBANPacketHead.SIZE; i < buffer.length; i++) {
+    		res[i-VBANPacketHead.SIZE] = buffer[i];
+    	}
+		return res;
+    }
 
     private void attachData(byte[] data) throws IllegalArgumentException {
         if (data.length > MAX_SIZE)
