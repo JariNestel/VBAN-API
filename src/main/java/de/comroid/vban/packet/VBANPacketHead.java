@@ -99,14 +99,14 @@ public class VBANPacketHead<T> implements ByteArray {
                 throw new InvalidPacketAttributeException("Invalid packet head: First bytes must be 'VBAN' [rcv='"
                         + new String(Util.subArray(bytes, 0, 4), StandardCharsets.US_ASCII) + "']");
 
-            int protocolInt = bytes[4] & 0b11111000;
+            int protocolInt = bytes[4] & 0b11100000;
             protocol = VBAN.Protocol.byValue(protocolInt);
 
             // throw exception if protocol is SERVICE
             if (protocol.getValue() == 0x60)
                 throw new IllegalStateException("Service Subprotocol is not supported!");
 
-            int dataRateInt = bytes[4] & 0b00000111;
+            int dataRateInt = bytes[4] & 0b00011111;
             switch (protocol.getValue()) {
                 case 0x00: // AUDIO
                     dataRateValue = SampleRate.byValue(dataRateInt);
